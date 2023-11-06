@@ -1,0 +1,10 @@
+version: 1.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:ap-southeast-1:772146113845:task-definition/DefiService:1"
+        LoadBalancerInfo:
+          ContainerName: "defiservice"
+          ContainerPort: "80"
+        PlatformVersion: "LATEST"
