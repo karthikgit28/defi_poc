@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.defi</groupId>
-	<artifactId>defi</artifactId>
+	 <artifactId>defi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>DEFI Project</name>
 	<description>Defi project</description>
