@@ -14,7 +14,7 @@
 	<name>DefiService</name>
 	<description>Defi project</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
 		<packaging.type>jar</packaging.type>
 		<springdoc.version>2.0.0</springdoc.version>
 	</properties>
@@ -81,6 +81,16 @@
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>1.15</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.133</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 		
 	</dependencies>
