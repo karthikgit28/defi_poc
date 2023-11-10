@@ -42,9 +42,9 @@ public class CashRichController {
 	
 	@GetMapping(value = "/croffers", produces = MediaType.APPLICATION_JSON_VALUE)  
 	@CrossOrigin
-	public List<CashRichOfferRO> getCashRichOffers()    
+	public List<CashRichOfferRO> getCashRichOffers(@RequestParam(name = "eligibility", required = false) String eligibility)    
 	{  
-		return service.fetchCROffers();  
+		return service.fetchCROffers(eligibility);  
 	} 
 	
 	@GetMapping(value = "/croffer", produces = MediaType.APPLICATION_JSON_VALUE)  
