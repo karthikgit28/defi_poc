@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>3.0.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.defi</groupId>
@@ -14,7 +14,7 @@
 	<name>DefiService</name>
 	<description>Defi project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<packaging.type>jar</packaging.type>
 		<springdoc.version>2.0.0</springdoc.version>
 	</properties>
