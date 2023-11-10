@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.amazonaws.util.CollectionUtils;
 import com.defi.constants.DEFIConstants;
+import com.defi.entity.AssetListing;
+import com.defi.entity.CashRichOffer;
 import com.defi.entity.Deal;
 import com.defi.entity.Notification;
 import com.defi.model.DealRO;
+import com.defi.repository.AssetListingRepository;
+import com.defi.repository.CashRichOfferRepository;
 import com.defi.repository.DealRepository;
 import com.defi.repository.NotificationRepository;
 
@@ -31,6 +35,12 @@ public class DealService {
 	
 	@Autowired
 	private HederaService hedService;
+	
+	@Autowired
+	private AssetListingRepository asset;
+	
+	@Autowired
+	private CashRichOfferRepository cro;
 
 	public DealRO createDeal(DealRO dealRO) {
 		dealRO.setExpiryDate(ZonedDateTime.now(ZoneId.of("UTC")).plusMonths(dealRO.getDuration()));
@@ -55,6 +65,49 @@ public class DealService {
 			e.printStackTrace();
 		}
 		return new DealRO();
+	}
+	
+	public List<DealRO> fetchDealByType(int customerId, String type) {
+		
+		List<DealRO> dealROList = new ArrayList<>();
+		try {
+			//List<Deal> dealList = new ArrayList<Deal>();
+			if(type.equalsIgnoreCase("asset")) {
+				List<AssetListing> assetId = asset.findByCustomerId(customerId);
+				if(assetId != null) {
+					assetId.forEach(f -> {
+						//Deal deal = new Deal();
+						List<Deal> dealList = dealRepo.findByAssetId(f.getAssetId());	
+						if (!CollectionUtils.isNullOrEmpty(dealList)) {
+							dealList.forEach(r -> {
+								DealRO deal = new DealRO();
+								deal = mapper.map(r, DealRO.class);
+								dealROList.add(deal);
+							});
+						}
+						//dealList.add(deal);
+					});
+				}
+			}
+			if(type.equalsIgnoreCase("cashRich")) {
+				List<CashRichOffer> croId = cro.findByCustomerId(customerId);
+				if(croId != null) {
+					croId.forEach(f -> {
+						List<Deal> dealList = dealRepo.findByCashRichOfferId(f.getCashRichOfferId());	
+						if (!CollectionUtils.isNullOrEmpty(dealList)) {
+							dealList.forEach(r -> {
+								DealRO deal = new DealRO();
+								deal = mapper.map(r, DealRO.class);
+								dealROList.add(deal);
+							});
+						}
+					});
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return dealROList;
 	}
 
 	public DealRO updateRMStatus(int dealId, String status) {
