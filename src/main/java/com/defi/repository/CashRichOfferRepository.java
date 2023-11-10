@@ -11,5 +11,6 @@ import com.defi.entity.CashRichOffer;
 public interface CashRichOfferRepository extends JpaRepository<CashRichOffer, Integer>{
 	
 	List<CashRichOffer> findByCustomerId(int cId);
+	List<CashRichOffer> findByEligibility(String eligibility);
 	
 }
