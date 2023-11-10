@@ -13,4 +13,6 @@ public interface DealRepository extends JpaRepository<Deal, Integer>{
 
 	List<Deal> findByDealStatusAndExpiryDateLessThan(String dealStatus,ZonedDateTime plusMonths);
 	List<Deal> findByDealStatus (String dealStatus);
+	List<Deal> findByAssetId (int assetId);
+	List<Deal> findByCashRichOfferId (int croId);
 }
