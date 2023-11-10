@@ -8,7 +8,7 @@ import com.defi.entity.Customer;
 import com.defi.model.*;
 import com.defi.repository.CustomerRepository;
 
-
+import java.util.*;
 @Service
 public class CustomerService {
 
@@ -21,6 +21,9 @@ public class CustomerService {
 	@Autowired
 	private HederaService hedService;
 	
+	@Autowired
+	private CashRichOfferService cRService;
+	
 	public CustomerRO login(CustomerRO customer) {
 		Customer customerDO = repo.findByUserName(customer.getUserName());
 		CustomerRO cust = new CustomerRO();
@@ -31,9 +34,22 @@ public class CustomerService {
 		return cust;
 	}
 
-	public CustomerRO enableInvestorMode(int customerid) {
+	public CustomerRO enableInvestorMode(int customerid, int investAmount) {
 		Customer customerDO = repo.findById(customerid).get();
 		customerDO.setCustomerType("CRO");
+		CashRichOfferRO cRO = new CashRichOfferRO();
+		cRO.setCustomerId(customerid);
+		cRO.setDesiredAmount(investAmount);
+		CRSelfAssessmentRO sA = new CRSelfAssessmentRO();
+		sA.setAllocationPercentage(9);
+		CategoryRO category = new CategoryRO();
+		category.setCategoryId(1);
+		sA.setCategory(category);
+		cRO.setRMInterestPayoutCycle("Quarterly");
+		List<CRSelfAssessmentRO> sAList = new ArrayList<>();
+		sAList.add(sA);
+		cRO.setSelfAssessment(sAList);
+		cRService.createCROffer(cRO);
 		return mapper.map(repo.save(customerDO), CustomerRO.class);
 	}
 	
