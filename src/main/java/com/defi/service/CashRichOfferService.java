@@ -50,8 +50,12 @@ public class CashRichOfferService {
 		return mapper.map(cROfferRepo.findById(cROfferId), CashRichOfferRO.class);
 	}
 
-	public List<CashRichOfferRO> fetchCROffers() {
-		return cROfferRepo.findAll().stream().map(cr -> mapper.map(cr, CashRichOfferRO.class))
+	public List<CashRichOfferRO> fetchCROffers(String eligibility) {
+		if (eligibility==null || eligibility=="") {
+			return cROfferRepo.findAll().stream().map(cr -> mapper.map(cr, CashRichOfferRO.class))
+					.collect(Collectors.toList());
+		}
+		return cROfferRepo.findByEligibility(eligibility).stream().map(cr -> mapper.map(cr, CashRichOfferRO.class))
 				.collect(Collectors.toList());
 	}
 	
@@ -72,24 +76,26 @@ public class CashRichOfferService {
 		cROfferPersisted.setUpdatedBy("RM");
 		cROfferPersisted.setUpdatedOn(ZonedDateTime.now(ZoneId.of("UTC")));
 		
-		if(cRO.getRMStatus().equalsIgnoreCase(DEFIConstants.RM_STATUS_GO)) {
-			cROfferPersisted.setEligibility("true");
-			cROfferPersisted.setUpdatedBy("RM");
-			cROfferPersisted.setUpdatedOn(ZonedDateTime.now(ZoneId.of("UTC")));
-			cROfferRepo.save(cROfferPersisted);
-			// Initiate Block Chain Smart Contract starts here
-		} else if (cRO.getRMStatus().equalsIgnoreCase(DEFIConstants.RM_STATUS_NO_GO)) {
-			cROfferPersisted.setEligibility("false");
-			cROfferRepo.save(cROfferPersisted);
-		}
-		
-		// Set the notification status
 		Notification notification = new Notification();
 		notification.setPkCol(cROfferPersisted.getCashRichOfferId());
 		notification.setTableName("CashRichOffer");
 		notification.setNotificationStatus("true");
 		notification.setCustomerId(cROfferPersisted.getCustomerId());
-		notification.setComments("RelationshipManager has responded to your Offer. Check your CashRichOffer for more details");
+		
+		if(cRO.getRMStatus().equalsIgnoreCase(DEFIConstants.RM_STATUS_GO)) {
+			cROfferPersisted.setEligibility("true");
+			cROfferPersisted.setUpdatedBy("RM");
+			cROfferPersisted.setUpdatedOn(ZonedDateTime.now(ZoneId.of("UTC")));
+			cROfferRepo.save(cROfferPersisted);
+			notification.setComments("RM APPROVED CR");
+			// Initiate Block Chain Smart Contract starts here
+		} else if (cRO.getRMStatus().equalsIgnoreCase(DEFIConstants.RM_STATUS_NO_GO)) {
+			cROfferPersisted.setEligibility("false");
+			cROfferRepo.save(cROfferPersisted);
+			notification.setComments("RM REJECTED CR");
+		}
+		
+		// Set the notification status
 		notifyRepo.save(notification);
 		
 		return mapper.map(cROfferPersisted, CashRichOfferRO.class);
