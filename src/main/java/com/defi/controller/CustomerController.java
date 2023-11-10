@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.defi.model.CustomerRO;
@@ -30,8 +31,8 @@ public class CustomerController {
 	
 	@PutMapping("/enable/investor/{customerid}")
 	@CrossOrigin
-	public CustomerRO enableInvestorMode(@PathVariable int customerid) {
-		return service.enableInvestorMode(customerid);
+	public CustomerRO enableInvestorMode(@PathVariable int customerid,@RequestParam(name = "investAmount", required = true) int investAmount) {
+		return service.enableInvestorMode(customerid,investAmount);
 	}
 	
 	@PostMapping("/register")
