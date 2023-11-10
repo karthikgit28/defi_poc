@@ -61,6 +61,13 @@ public class DealController {
 		return service.fetchDealById(dealId);  
 	} 
 	
+	@GetMapping(value = "/fetchdeal/{customerId}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)  
+	@CrossOrigin
+	public List<DealRO> fetchDealByCustomerId(@PathVariable int customerId,@PathVariable String type)    
+	{  
+		return service.fetchDealByType(customerId,type);  
+	} 
+	
 	@GetMapping(value = "/fetchActiveExpiringdeals", produces = MediaType.APPLICATION_JSON_VALUE)  
 	@CrossOrigin
 	public List<DealRO> getActiveExpiringDeals()    
