@@ -130,7 +130,7 @@ public class HederaService {
 		}
 	}
 	
-	public String changeLoanState (int skuId, String state) {
+	public int changeLoanState (int skuId, String state) {
 		try {
 			Map<String,String> req = new HashMap<>();
 			req.put("contractId", "0.0.4501578");
@@ -139,10 +139,10 @@ public class HederaService {
 			Map<String,String> resMap = hederaUtils.loanChangeState(req);
 			log.info("Updated LoanStatus :: "+resMap.get("status"));
 			log.info("Updated LoanState :: "+resMap.get("state"));
-			return resMap.get("state");
+			return Integer.parseInt(resMap.get("state"));
 		}catch(Exception e) {
 			e.printStackTrace();
-			return "";
+			return 0;
 		}
 	}
 }

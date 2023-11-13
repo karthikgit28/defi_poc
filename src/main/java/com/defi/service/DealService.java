@@ -177,8 +177,7 @@ public class DealService {
 				notifyRepo.save(notificationForRM);
 			}
 		} else if (customerType.equalsIgnoreCase(DEFIConstants.CUSTOMER_TYPE_CRO)) {
-			String hederaStatus = hedService.changeLoanState(deal.getSkuId(), DEFIConstants.HEDERA_LOAN_STATUS_PENDING_CUSTOMER_CONFIRMATION);
-			deal.setHederaStatus(Integer.parseInt(hederaStatus));
+			deal.setHederaStatus(hedService.changeLoanState(deal.getSkuId(), DEFIConstants.HEDERA_LOAN_STATUS_PENDING_CUSTOMER_CONFIRMATION));
 			deal.setUpdatedBy("CRO");
 			deal.setCRStatus(customerStatus);
 		}
@@ -186,11 +185,11 @@ public class DealService {
 		if (DEFIConstants.CUSTOMER_STATUS_GO.equals(deal.getAOStatus()) && 
 				DEFIConstants.CUSTOMER_STATUS_GO.equals(deal.getCRStatus())) {
 			// Update the loan status to ACTIVE 
-			String hederaStatus = hedService.changeLoanState(deal.getSkuId(), DEFIConstants.HEDERA_LOAN_STATUS_ACTIVE);
+			int hederaStatus = hedService.changeLoanState(deal.getSkuId(), DEFIConstants.HEDERA_LOAN_STATUS_ACTIVE);
 			deal.setApplicationDate(ZonedDateTime.now(ZoneId.of("UTC")));
 			deal.setExpiryDate(ZonedDateTime.now(ZoneId.of("UTC")).plusMonths(deal.getDuration()));
 			deal.setDealStatus(DEFIConstants.DEAL_STATUS_ACTIVE);
-			deal.setHederaStatus(Integer.parseInt(hederaStatus));
+			deal.setHederaStatus(hederaStatus);
 		}
 		dealRepo.save(deal);
 		return mapper.map(deal, DealRO.class);

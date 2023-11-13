@@ -1,6 +1,7 @@
 package com.defi.hedera;
 
 import java.util.Map;
+import java.time.Duration;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class HederaUtils {
 				.body(Mono.just(nftTokenRequest),CreateNFTTokenRequest.class)
 				.retrieve()
 				.bodyToMono(CreateNFTTokenResponse.class)
+				.timeout(Duration.ofSeconds(5))
 				.block();
 	}
 	
@@ -36,6 +38,7 @@ public class HederaUtils {
 				.body(Mono.just(loanRequest),AddLoanRequest.class)
 				.retrieve()
 				.bodyToMono(HashMap.class)
+				.timeout(Duration.ofSeconds(5))
 				.block();
 	}
 	
@@ -46,6 +49,7 @@ public class HederaUtils {
 				.body(Mono.just(contractReq),InitiateLoanContractRequest.class)
 				.retrieve()
 				.bodyToMono(LoanContractResponse.class)
+				.timeout(Duration.ofSeconds(5))
 				.block();
 		
 	}
@@ -57,6 +61,7 @@ public class HederaUtils {
 				.body(Mono.just(changeState),Map.class)
 				.retrieve()
 				.bodyToMono(HashMap.class)
+				.timeout(Duration.ofSeconds(5))
 				.block();
 	}
 
