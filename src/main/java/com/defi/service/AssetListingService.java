@@ -113,7 +113,7 @@ public class AssetListingService {
 		PaymentTerms paymentTerm = mapper.map(paymentTerms, PaymentTerms.class);
 		paymentTerm.setUpdatedBy("RM");
 		paymentTerm.setUpdatedOn(ZonedDateTime.now(ZoneId.of("UTC")));
-		
+		paymentTerm.setDuration(paymentTerm.getRMDuration());
 		if (paymentTerms.getRMStatus().equalsIgnoreCase(DEFIConstants.RM_STATUS_GO)) {
 			asset.setUpdatedBy("RM");
 			asset.setUpdatedOn(ZonedDateTime.now(ZoneId.of("UTC")));
